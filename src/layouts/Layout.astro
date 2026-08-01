@@ -7,63 +7,210 @@ import "../styles/global.css";
 
 export interface Props {
   title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
 }
 
+const {
+  title,
+  description = "Andrew Bustos is a fullstack engineer in Santa Clara, CA shipping AI-powered products, Next.js web apps and automation tooling for startups and small teams. See the work and get in touch.",
+  image = "/og-image.jpg",
+  noindex = false,
+} = Astro.props;
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const resolvedImageWithDomain = new URL(image, Astro.site).toString();
 
-const resolvedImageWithDomain = new URL(
-  "/ogimg.jpg",
-  Astro.site
-).toString();
-
-const { title } = Astro.props;
-
+const siteName = "Andrew Bustos";
 const makeTitle = title
-  ? title + " | " + "Andrew Bustos"
-  : "Astroship - Starter Template for Astro with Tailwind CSS";
+  ? `${title} | ${siteName} — Fullstack Engineer`
+  : "Andrew Bustos — Fullstack Engineer & Web Developer";
+
+// Structured data. `Person` powers the knowledge panel / rich results, and
+// `WebSite` ties the pages together under one named site.
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Andrew Bustos",
+  url: Astro.site?.toString(),
+  image: resolvedImageWithDomain,
+  jobTitle: "Fullstack Engineer",
+  description,
+  address: {
+    "@type": "PostalPlace",
+    addressLocality: "Santa Clara",
+    addressRegion: "CA",
+    addressCountry: "US",
+  },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "California State University, East Bay",
+  },
+  worksFor: {
+    "@type": "Organization",
+    name: "Interpret AI",
+  },
+  knowsAbout: [
+    "Fullstack Web Development",
+    "React",
+    "React Native",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "Python",
+    "FastAPI",
+    "PostgreSQL",
+    "Supabase",
+    "Playwright",
+    "AWS",
+    "AI Product Engineering",
+  ],
+  sameAs: ["https://github.com/BustosAndrew"],
+};
+
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteName,
+  url: Astro.site?.toString(),
+  inLanguage: "en-US",
+  author: { "@type": "Person", name: "Andrew Bustos" },
+};
 ---
 
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
-    <script type="text/javascript" src="https://js.hcaptcha.com/1/api.js?recaptchacompat=off" async defer></script>
-    <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
+
+    <!-- Matches the light/dark surface colours so mobile browser chrome blends in -->
+    <meta
+      name="theme-color"
+      content="#fdf7f6"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#14100f"
+      media="(prefers-color-scheme: dark)"
+    />
+
     <SEO
       title={makeTitle}
-      description="Take a look at Andrew Bustos's portfolio and contact him with project ideas."
+      description={description}
       canonical={canonicalURL}
+      noindex={noindex}
+      nofollow={noindex}
       openGraph={{
         basic: {
           url: canonicalURL,
           type: "website",
-          title: `Andrew Bustos Portfolio Site`,
+          title: makeTitle,
           image: resolvedImageWithDomain,
         },
+        optional: {
+          description,
+          siteName,
+          locale: "en_US",
+        },
         image: {
-          alt: "Andrew Bustos Portfolio Homepage screenshot",
+          alt: "Andrew Bustos — fullstack engineer portfolio",
+          width: 1200,
+          height: 630,
         },
       }}
+      twitter={{
+        card: "summary_large_image",
+        title: makeTitle,
+        description,
+        image: resolvedImageWithDomain,
+        imageAlt: "Andrew Bustos — fullstack engineer portfolio",
+      }}
     />
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(personSchema)}
+    />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(siteSchema)}
+    />
+
+    <!-- Resolve the theme before first paint so dark-mode users never see a
+         white flash. Also flags that JS is live, which un-hides `.reveal`
+         elements only when the observer below can actually run. -->
+    <script is:inline>
+      (function () {
+        const root = document.documentElement;
+        root.classList.add("js");
+        try {
+          const stored = localStorage.getItem("theme");
+          const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)"
+          ).matches;
+          if (stored === "dark" || (!stored && prefersDark)) {
+            root.classList.add("dark");
+          }
+        } catch (e) {
+          /* localStorage blocked — fall back to light */
+        }
+      })();
+    </script>
   </head>
-  <body class="bg-red-100">
+
+  <!-- flex column + `mt-auto` on the footer keeps it pinned to the bottom on
+       short pages like /404 -->
+  <body
+    class="flex min-h-screen flex-col overflow-x-clip bg-surface text-stone-700 antialiased selection:bg-brand-500 selection:text-white dark:bg-surface-dark dark:text-stone-300">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-stone-900 focus:px-4 focus:py-2 focus:text-white dark:focus:bg-white dark:focus:text-stone-900">
+      Skip to content
+    </a>
+
     <Navbar />
-    <slot />
+    <main id="main">
+      <slot />
+    </main>
     <Footer />
-    <style is:global>
-      /* Improve Page speed */
-      /* https://css-tricks.com/almanac/properties/c/content-visibility/ */
-      img {
-        content-visibility: auto;
-      }
-      
-      :root {
-        font-family: 'Inter Variable', sans-serif;
-      }
-      
-    </style>
+
+    <!-- Scroll-reveal: adds `.is-visible` once an element enters the viewport. -->
+    <script is:inline>
+      (function () {
+        const items = document.querySelectorAll(".reveal");
+        if (!items.length) return;
+
+        const reduceMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        if (reduceMotion || !("IntersectionObserver" in window)) {
+          items.forEach((el) => el.classList.add("is-visible"));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: "0px 0px -10% 0px", threshold: 0.1 }
+        );
+
+        items.forEach((el) => observer.observe(el));
+      })();
+    </script>
   </body>
 </html>

@@ -15,22 +15,31 @@ const {
   ...rest
 } = Astro.props;
 
-const sizes = {
-  md: "px-5 py-2.5",
-  lg: "px-6 py-3",
+// See link.astro — the Props index signature widens these to `any`.
+const sizes: Record<string, string> = {
+  md: "px-5 py-2.5 text-sm",
+  lg: "px-6 py-3 text-base",
 };
 
-const styles = {
-  outline: "border-2 border-black hover:bg-black text-black hover:text-white",
+// Mirrors link.astro — see the note there on why the white variants shift to a
+// rose tint plus a glow ring rather than merely darkening.
+const styles: Record<string, string> = {
   primary:
-    "bg-black text-white hover:bg-slate-900  border-2 border-transparent",
+    "bg-stone-900 text-white border-2 border-transparent shadow-lg shadow-stone-900/20 ring-0 ring-brand-400/0 hover:bg-stone-800 hover:shadow-xl hover:shadow-stone-900/25 dark:bg-white dark:text-stone-900 dark:shadow-black/40 dark:hover:bg-brand-50 dark:hover:text-brand-700 dark:hover:ring-4 dark:hover:ring-brand-400/30 dark:hover:shadow-brand-500/20",
+  outline:
+    "bg-transparent border-2 border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white dark:border-stone-600 dark:text-white dark:hover:bg-white dark:hover:text-stone-900",
+  inverted:
+    "bg-white text-stone-900 border-2 border-transparent shadow-lg shadow-black/20 ring-0 ring-brand-400/0 hover:bg-brand-50 hover:text-brand-700 hover:shadow-xl hover:shadow-brand-500/30 hover:ring-4 hover:ring-brand-400/40",
 };
 ---
 
 <button
   {...rest}
   class:list={[
-    "rounded text-center transition focus-visible:ring-2 ring-offset-2 ring-gray-200",
+    "inline-flex items-center justify-center rounded-lg font-medium text-center",
+    "transition-all duration-300 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
+    "disabled:pointer-events-none disabled:opacity-60",
+    "motion-reduce:transform-none motion-reduce:transition-none",
     block && "w-full",
     sizes[size],
     styles[style],

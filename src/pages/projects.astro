@@ -31,7 +31,7 @@ const projects = [
       "Real-time Email Analytics",
     ],
     button: {
-      text: "Block spam and scams with Sendworth!",
+      text: "Block spam and scams!",
       link: "https://sendworth.dev/",
     },
   },
@@ -46,7 +46,7 @@ const projects = [
       "AI Menu Suggestions",
     ],
     button: {
-      text: "Scan your restaurant menu!",
+      text: "Scan your restaurant website!",
       link: "https://llmenu.ai/",
     },
   },
@@ -144,15 +144,25 @@ const projects = [
 ];
 ---
 
-<Layout title="Projects">
+<Layout
+  title="Projects"
+  description="A portfolio of fullstack projects by Andrew Bustos — ecommerce store builders, AI tools, live translation platforms, VR training simulations, and more, built with Next.js, Supabase, TypeScript, Python and Unity.">
   <Container>
-    <Sectionhead>
+    <Sectionhead eyebrow="Portfolio">
       <Fragment slot="title">Projects</Fragment>
-      <Fragment slot="desc">Check out all of my projects below!</Fragment>
+      <Fragment slot="desc">
+        A selection of products, hackathon builds and client work — each one
+        shipped end to end, from schema to interface.
+      </Fragment>
     </Sectionhead>
 
-    <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-screen-lg mt-12">
-      {projects.map((item) => <ProjectsComponent plan={item} />)}
+    <div
+      class="mx-auto mt-16 grid max-w-6xl grid-cols-1 gap-6 pb-24 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        projects.map((item, index) => (
+          <ProjectsComponent plan={item} index={index} />
+        ))
+      }
     </div>
   </Container>
 </Layout>

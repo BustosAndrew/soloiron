@@ -1,54 +1,265 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
-html.dark {
-  background-color: #1e2124;
-  color: #fff;
+/* Class-based dark mode (toggled on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans:
+    "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+
+  /* Accent ramp — a warm rose that carries the red hue of the original design
+     forward, without the full `bg-red-100` wash. */
+  --color-brand-50: #fff1f2;
+  --color-brand-100: #ffe4e6;
+  --color-brand-200: #fecdd3;
+  --color-brand-300: #fda4af;
+  --color-brand-400: #fb7185;
+  --color-brand-500: #f43f5e;
+  --color-brand-600: #e11d48;
+  --color-brand-700: #be123c;
+  --color-brand-800: #9f1239;
+  --color-brand-900: #881337;
+  --color-brand-950: #4c0519;
+
+  /* Page surfaces. Both keep a faint red tint so the site reads warm in either
+     theme: light is a barely-there blush, dark is a red-leaning near-black. */
+  --color-surface: #fdf7f6;
+  --color-surface-dark: #14100f;
+
+  /* Motion */
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.8s ease-out both;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-blob: blob 18s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  --animate-marquee: marquee 32s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-0.75rem);
+    }
+  }
+
+  @keyframes blob {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(6%, -8%) scale(1.08);
+    }
+    66% {
+      transform: translate(-5%, 5%) scale(0.94);
+    }
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
-.dark .nav-links a {
-  color: #fff;
+@layer base {
+  :root {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    /* Offset for the sticky navbar when jumping to #anchors */
+    scroll-padding-top: 6rem;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* One consistent focus ring across links, buttons and inputs */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-500);
+    color: white;
+  }
+
+  /* Improve page speed */
+  /* https://css-tricks.com/almanac/properties/c/content-visibility/ */
+  img {
+    content-visibility: auto;
+  }
+
+  /* Scrollbar */
+  * {
+    scrollbar-color: var(--color-stone-300) transparent;
+  }
+
+  .dark * {
+    scrollbar-color: var(--color-stone-700) transparent;
+  }
+
+  /* Prose links/headings need to follow the warm palette too */
+  .prose {
+    --tw-prose-links: var(--color-brand-600);
+  }
+
+  .dark .prose {
+    --tw-prose-links: var(--color-brand-400);
+  }
 }
 
-.dark img {
-  box-shadow: 4px 4px 0 #000;
+@layer utilities {
+  /* Scroll-triggered reveal. Elements start hidden and are un-hidden by the
+     IntersectionObserver in Layout.astro; if JS never runs, the
+     `no-js`-style fallback below keeps content visible. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    /* Drop the compositor hint once the animation has played — a lingering
+       will-change also creates a containing block, which interferes with
+       position: sticky and fixed descendants. */
+    will-change: auto;
+  }
+
+  html:not(.js) .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Gradient text used for headline accents */
+  .text-gradient {
+    background-image: linear-gradient(
+      110deg,
+      var(--color-stone-900) 0%,
+      var(--color-brand-600) 45%,
+      var(--color-brand-400) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .dark .text-gradient {
+    background-image: linear-gradient(
+      110deg,
+      #ffffff 0%,
+      var(--color-brand-300) 45%,
+      var(--color-brand-400) 100%
+    );
+  }
+
+  /* Soft radial glow behind hero / CTA blocks. The blur is deliberately larger
+     than the blob itself so the colour dissolves rather than reading as a disc. */
+  .glow-blob {
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  /* Subtle dotted grid backdrop */
+  .bg-dots {
+    background-image: radial-gradient(
+      var(--color-stone-300) 1px,
+      transparent 1px
+    );
+    background-size: 22px 22px;
+  }
+
+  .dark .bg-dots {
+    background-image: radial-gradient(
+      var(--color-stone-800) 1px,
+      transparent 1px
+    );
+  }
+
+  /* Card hover treatment shared by feature/project/tech cards */
+  .card-hover {
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.35s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-0.375rem);
+  }
 }
 
-.dark .yoga-link {
-  @apply text-white;
-}
+/* Respect users who ask for less motion: drop transforms and infinite loops,
+   keep opacity so nothing disappears. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    scroll-behavior: auto;
+  }
 
-.dark .lightwave-link {
-  @apply text-yellow-400;
-  @apply font-bold;
-}
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 
-.lightwave-link {
-  @apply text-yellow-400;
-  @apply font-bold;
-}
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 
-.yoga-link {
-  @apply text-slate-800;
-}
-
-.dark
-  .prose
-  :where(h2, h3, h1, h4, h5, h6):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  @apply text-gray-300;
-}
-
-.dark
-  .prose
-  :where(blockquote):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  @apply text-gray-200;
-}
-
-.dark
-  .prose
-  :where(thead th, a):not(
-    :where([class~="not-prose"], [class~="not-prose"] *)
-  ) {
-  @apply text-white;
+  .card-hover:hover {
+    transform: none;
+  }
 }

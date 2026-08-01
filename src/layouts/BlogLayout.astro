@@ -1,7 +1,6 @@
 ---
 import Container from "@components/container.astro";
 import { getFormattedDate } from "@utils/all";
-import { log } from "astro/dist/core/logger/core";
 import Layout from "./Layout.astro";
 
 const { frontmatter } = Astro.props;
@@ -14,7 +13,7 @@ const { frontmatter } = Astro.props;
         {frontmatter.category}
       </span>
       <h1
-        class="text-4xl lg:text-5xl font-bold lg:tracking-tight mt-1 lg:leading-tight">
+        class="mt-1 text-4xl font-bold text-stone-900 lg:text-5xl lg:leading-tight lg:tracking-tight dark:text-white">
         {frontmatter.title}
       </h1>
       <div class="flex gap-2 mt-3 items-center flex-wrap md:flex-nowrap">
@@ -28,7 +27,7 @@ const { frontmatter } = Astro.props;
         <span class="text-gray-400 hidden md:block">•</span>
         <div class="w-full md:w-auto flex flex-wrap gap-3">
           {
-            frontmatter.tags.map((tag) => (
+            frontmatter.tags.map((tag: string) => (
               <span class="text-sm text-gray-500">#{tag}</span>
             ))
           }
@@ -36,13 +35,13 @@ const { frontmatter } = Astro.props;
       </div>
     </div>
 
-    <div class="mx-auto prose prose-lg mt-6">
+    <div class="prose prose-lg mx-auto mt-6 dark:prose-invert">
       <slot />
     </div>
-    <div class="text-center mt-8">
+    <div class="mt-8 pb-24 text-center">
       <a
         href="/blog"
-        class="bg-gray-100 px-5 py-3 rounded-md hover:bg-gray-200 transition"
+        class="inline-block rounded-lg bg-stone-100 px-5 py-3 transition-colors hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700"
         >← Back to Blog</a
       >
     </div>

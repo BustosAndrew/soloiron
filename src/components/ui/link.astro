@@ -17,16 +17,29 @@ const {
   ...rest
 } = Astro.props;
 
-const sizes = {
-  lg: "px-5 py-2.5",
-  md: "px-4 py-2",
+// Explicitly typed: the `[x: string]: any` index signature on Props widens the
+// destructured `size`/`style` to `any`, which would otherwise make these lookups
+// implicit-any errors under `astro check`.
+const sizes: Record<string, string> = {
+  lg: "px-5 py-2.5 text-base",
+  md: "px-4 py-2 text-sm",
 };
 
-const styles = {
-  outline: "bg-white border-2 border-black hover:bg-gray-100 text-black ",
-  primary: "bg-black text-white hover:bg-gray-800  border-2 border-transparent",
-  inverted: "bg-white text-black   border-2 border-transparent",
-  muted: "bg-gray-100 hover:bg-gray-200   border-2 border-transparent",
+/**
+ * Hover states have to stay legible on whatever they sit on. The white
+ * variants (`inverted`, and `primary` in dark mode) can't just darken a shade —
+ * white to stone-100 is invisible — so they shift to a rose tint, recolour
+ * their label, and pick up a brand-tinted glow ring instead.
+ */
+const styles: Record<string, string> = {
+  primary:
+    "bg-stone-900 text-white border-2 border-transparent shadow-lg shadow-stone-900/20 ring-0 ring-brand-400/0 hover:bg-stone-800 hover:shadow-xl hover:shadow-stone-900/25 dark:bg-white dark:text-stone-900 dark:shadow-black/40 dark:hover:bg-brand-50 dark:hover:text-brand-700 dark:hover:ring-4 dark:hover:ring-brand-400/30 dark:hover:shadow-brand-500/20",
+  outline:
+    "bg-white text-stone-900 border-2 border-stone-900 shadow-sm hover:bg-stone-900 hover:text-white hover:shadow-lg dark:bg-transparent dark:text-white dark:border-stone-600 dark:hover:bg-white dark:hover:text-stone-900 dark:hover:border-white",
+  inverted:
+    "bg-white text-stone-900 border-2 border-transparent shadow-lg shadow-black/20 ring-0 ring-brand-400/0 hover:bg-brand-50 hover:text-brand-700 hover:shadow-xl hover:shadow-brand-500/30 hover:ring-4 hover:ring-brand-400/40",
+  muted:
+    "bg-stone-100 text-stone-900 border-2 border-transparent hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-100 dark:hover:bg-stone-700",
 };
 ---
 
@@ -34,7 +47,9 @@ const styles = {
   href={href}
   {...rest}
   class:list={[
-    "rounded text-center transition focus-visible:ring-2 ring-offset-2 ring-gray-200",
+    "inline-flex items-center justify-center rounded-lg font-medium text-center",
+    "transition-all duration-300 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
+    "motion-reduce:transform-none motion-reduce:transition-none",
     block && "w-full",
     sizes[size],
     styles[style],

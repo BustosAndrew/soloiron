@@ -1,0 +1,5 @@
+# pnpm 11 reads settings from here rather than the "pnpm" field in package.json.
+# Both packages ship native/postinstall build steps that must be allowed to run.
+allowBuilds:
+  esbuild: true
+  sharp: true

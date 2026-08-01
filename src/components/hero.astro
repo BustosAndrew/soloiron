@@ -1,51 +1,100 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 import heroImage from "../assets/profile.jpeg";
 import Link from "@components/ui/link.astro";
-import { Icon } from 'astro-icon/components'
+import { Icon } from "astro-icon/components";
 ---
 
-<main
-  class="grid lg:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
-  <div class="py-6 md:order-1 hidden md:block">
-    <Image
-      src={heroImage}
-      alt="Picture of Andrew Bustos"
-      widths={[200, 400, 500]}
-      sizes="(max-width: 800px) 100vw, 620px"
-      loading="eager"
-      format="avif"
-      style="border-radius: 50%; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);"
-    />
-  </div>
-  <div>
-    <h1
-      class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter">
-      Fullstack Engineer Andrew Bustos
-    </h1>
-    <p class="text-lg mt-4 text-slate-600 max-w-xl">
-      Since early 2021, I've been developing web apps
-      to hone my skills as a web developer. I also specialize in CMS web
-      development using Webflow or other apps to bring marketing sites up to speed very quickly.
-    </p>
-    <div class="mt-6 flex flex-col sm:flex-row gap-3">
-      <Link
-        href="/projects"
-        class="flex gap-1 items-center justify-center shadow-xl"
-        rel="noopener">
-        <Icon class="text-white w-5 h-5" name="ant-design:project-outlined" />
-        My Projects
-      </Link>
-      <Link
-        size="lg"
-        style="outline"
-        rel="noopener"
-        href="https://github.com/BustosAndrew"
-        class="flex gap-1 items-center justify-center shadow-xl"
-        target="_blank">
-        <Icon class="text-black w-4 h-4" name="bx:bxl-github" />
-        My GitHub
-      </Link>
+<!-- `section`, not the main landmark — Layout.astro already owns that. -->
+<section class="relative isolate">
+  <!--
+    Ambient background: dotted grid + two drifting colour blobs.
+
+    It breaks out of the container to full viewport width (left-1/2 +
+    -translate-x-1/2 + w-screen) so no vertical seam lands at the container
+    edge, and a single radial mask on this wrapper fades every child out in all
+    directions — that is what keeps it blending into the page background
+    instead of ending on a hard rectangle.
+  -->
+  <div
+    class="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 overflow-hidden [mask-image:radial-gradient(70%_60%_at_50%_30%,#000_30%,transparent_100%)] [-webkit-mask-image:radial-gradient(70%_60%_at_50%_30%,#000_30%,transparent_100%)]"
+    aria-hidden="true">
+    <div class="bg-dots absolute inset-0 opacity-40"></div>
+    <div
+      class="glow-blob absolute left-[6%] top-[-12%] h-[26rem] w-[26rem] animate-blob rounded-full bg-brand-300/25 dark:bg-brand-600/20">
+    </div>
+    <div
+      class="glow-blob absolute right-[4%] top-[10%] h-[30rem] w-[30rem] animate-blob rounded-full bg-amber-300/20 [animation-delay:-6s] dark:bg-amber-600/15">
     </div>
   </div>
-</main>
+
+  <div
+    class="grid place-items-center gap-10 pb-12 pt-12 md:pb-24 md:pt-16 lg:grid-cols-2 lg:gap-16">
+    <div class="order-2 w-full max-w-md animate-fade-in py-6 lg:order-2">
+      <div class="group relative mx-auto w-fit">
+        <!-- Soft halo that intensifies on hover -->
+        <div
+          class="absolute -inset-4 rounded-full bg-gradient-to-tr from-brand-400/40 via-amber-400/30 to-transparent opacity-70 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
+          aria-hidden="true">
+        </div>
+        <Image
+          src={heroImage}
+          alt="Portrait of Andrew Bustos, fullstack engineer"
+          widths={[240, 400, 560]}
+          sizes="(max-width: 1024px) 60vw, 420px"
+          loading="eager"
+          fetchpriority="high"
+          format="avif"
+          class="relative aspect-square w-56 animate-float rounded-full object-cover shadow-2xl shadow-stone-900/30 ring-4 ring-white transition-transform duration-500 group-hover:scale-[1.03] sm:w-64 lg:w-80 dark:shadow-black/60 dark:ring-stone-800"
+        />
+      </div>
+    </div>
+
+    <div class="order-1 text-center lg:order-1 lg:text-left">
+      <p
+        class="mb-5 inline-flex animate-fade-up items-center gap-2 rounded-full border border-stone-200 bg-white/80 px-3.5 py-1.5 text-sm font-medium text-stone-600 shadow-sm backdrop-blur dark:border-stone-800 dark:bg-stone-900/80 dark:text-stone-300">
+        <span class="relative flex h-2 w-2" aria-hidden="true">
+          <span
+            class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"
+          ></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"
+          ></span>
+        </span>
+        Available for new projects
+      </p>
+
+      <h1
+        class="animate-fade-up text-4xl font-bold tracking-tight text-stone-900 [animation-delay:80ms] sm:text-5xl lg:text-6xl lg:tracking-tighter xl:text-7xl dark:text-white">
+        Fullstack Engineer
+        <span class="text-gradient block">Andrew Bustos</span>
+      </h1>
+
+      <p
+        class="mx-auto mt-5 max-w-xl animate-fade-up text-base leading-relaxed text-stone-600 [animation-delay:160ms] sm:text-lg lg:mx-0 dark:text-stone-400">
+        Fullstack engineer at Interpret AI, where I ship AI-powered products
+        used across 70+ languages. I also build for startups and small teams as
+        a freelancer — Next.js apps, payment flows, and the internal tooling
+        that quietly deletes hours of manual work every week.
+      </p>
+
+      <div
+        class="mt-8 flex animate-fade-up flex-col justify-center gap-3 [animation-delay:240ms] sm:flex-row lg:justify-start">
+        <Link href="/projects" class="gap-2" rel="noopener">
+          <Icon class="h-5 w-5" name="ant-design:project-outlined" />
+          My Projects
+        </Link>
+        <Link
+          size="lg"
+          style="outline"
+          rel="noopener"
+          href="https://github.com/BustosAndrew"
+          class="gap-2"
+          target="_blank">
+          <Icon class="h-4 w-4" name="bx:bxl-github" />
+          My GitHub
+        </Link>
+      </div>
+
+    </div>
+  </div>
+</section>

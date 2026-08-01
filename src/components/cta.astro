@@ -1,16 +1,48 @@
 ---
 import Link from "./ui/link.astro";
+import { Icon } from "astro-icon/components";
 ---
 
-<div
-  class="bg-black p-8 md:px-20 md:py-20 mt-20 mx-auto max-w-5xl rounded-lg flex flex-col items-center text-center">
-  <h2 class="text-white text-4xl md:text-6xl tracking-tight">
-    Get in touch.
-  </h2>
-  <p class="text-slate-400 mt-4 text-lg md:text-xl">
-    I'm open to discuss any opportunity you may have for me.
-  </p>
-  <div class="flex mt-5">
-    <Link href="/contact" style="inverted">Contact Me</Link>
+<section class="pb-20 pt-4 md:pb-28">
+  <div
+    class="reveal relative isolate mx-auto max-w-5xl overflow-hidden rounded-3xl bg-stone-900 px-8 py-16 text-center shadow-2xl shadow-stone-900/30 md:px-20 md:py-20 dark:bg-stone-900 dark:shadow-black/50 dark:ring-1 dark:ring-stone-800">
+    <!-- Layered ambience: dotted grid, two glows, and a top hairline -->
+    <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+      <div
+        class="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(#fff_1px,transparent_1px)] [background-size:22px_22px]">
+      </div>
+      <div
+        class="glow-blob absolute -left-20 -top-24 h-72 w-72 animate-blob rounded-full bg-brand-500/40">
+      </div>
+      <div
+        class="glow-blob absolute -bottom-24 -right-16 h-72 w-72 animate-blob rounded-full bg-amber-500/25 [animation-delay:-8s]">
+      </div>
+      <div
+        class="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent">
+      </div>
+    </div>
+
+    <h2
+      class="text-3xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+      Get in touch.
+    </h2>
+    <p class="mx-auto mt-4 max-w-xl text-lg text-stone-400 md:text-xl">
+      I'm open to discuss any opportunity you may have for me.
+    </p>
+
+    <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+      <Link href="/contact" style="inverted" class="gap-2">
+        <Icon class="h-5 w-5" name="uil:envelope" />
+        Contact Me
+      </Link>
+      <Link
+        href="https://github.com/BustosAndrew"
+        target="_blank"
+        rel="noopener"
+        class="gap-2 border-2 border-white/25 bg-white/5 text-white shadow-none backdrop-blur hover:border-white/70 hover:bg-white/15 hover:shadow-lg hover:shadow-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/15">
+        <Icon class="h-5 w-5" name="bx:bxl-github" />
+        View GitHub
+      </Link>
+    </div>
   </div>
-</div>
+</section>
