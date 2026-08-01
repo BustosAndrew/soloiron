@@ -6,9 +6,39 @@ import ProjectsComponent from "@components/projects.astro";
 
 const projects = [
   {
-    name: "Interpret.ai",
-    tech: "Postgres, Python, React, LLMs, TypeScript",
+    name: "Markii",
+    tech: "Supabase, Next.js, Typescript, Shadcn UI, Stripe",
+    popular: false,
+    features: [
+      "Ecommerce Store Builder",
+      "Stripe Payment Integration",
+      "Customizable Themes",
+      "Product Management",
+    ],
+    button: {
+      text: "Build your ecommmerce store!",
+      link: "https://markii-orcin.vercel.app/",
+    },
+  },
+  {
+    name: "Sendworth",
+    tech: "Supabase, Next.js, Typescript, Shadcn UI, Redis",
     popular: true,
+    features: [
+      "Email & Domain Verification",
+      "Spam and Scam Detection",
+      "Customizable Email Templates",
+      "Real-time Email Analytics",
+    ],
+    button: {
+      text: "Block spam and scams with Sendworth!",
+      link: "https://sendworth.dev/",
+    },
+  },
+  {
+    name: "Interpret.ai",
+    tech: "Postgres, Python, React, Websockets, TypeScript",
+    popular: false,
     features: [
       "Live Translation/Transcription",
       "Document management",
@@ -23,7 +53,7 @@ const projects = [
   {
     name: "4 Seasons Golf Tour",
     tech: "Supabase, Next.js, Typescript, Shadcn UI, Stripe",
-    popular: false,
+    popular: true,
     features: [
       "Golf Trip Management",
       "Stripe Payment Integration",
@@ -38,7 +68,7 @@ const projects = [
   {
     name: "AI Assist",
     tech: "Go, Next.js, Twilio, Retell AI, Firebase",
-    popular: true,
+    popular: false,
     features: [
       "AI IT Phone Support",
       "Conversational AI",
@@ -54,7 +84,7 @@ const projects = [
   {
     name: "Rescue Ready VR",
     tech: "Unity, C#, Oculus Quest",
-    popular: false,
+    popular: true,
     features: [
       "VR Evacuation Training",
       "Unity 3D Environment",
@@ -69,7 +99,7 @@ const projects = [
   {
     name: "Docufiller AI",
     tech: "React, Python, OpenAI",
-    popular: true,
+    popular: false,
     features: [
       "Automated Document Filling",
       "Click to drag interface",
@@ -84,7 +114,7 @@ const projects = [
   {
     name: "3Datalyze",
     tech: "Unity, C#, Oculus Quest",
-    popular: false,
+    popular: true,
     features: [
       "3D Data Simulation",
       "Passthrough 3D Environment",
@@ -94,68 +124,6 @@ const projects = [
     button: {
       text: "Check out the Devpost",
       link: "https://devpost.com/software/table-61",
-    },
-  },
-  {
-    name: "BuyBuddy",
-    tech: "Firebase, Python, Streamlit, OpenAI",
-    popular: true,
-    features: [
-      "Amazon.au product recs",
-      "An understanding assistant",
-      "AI Function Calling",
-      "Google Sign In Auth",
-    ],
-    button: {
-      text: "Check out the Github",
-      link: "https://github.com/BustosAndrew/buybuddyapp",
-    },
-  },
-  {
-    name: "Lirical",
-    tech: "Next.js, Firebase, Chakra UI, Stripe",
-    popular: false,
-    features: [
-      "Generate lyric ideas",
-      "Speech to text input",
-      "Audio Transcription",
-      "Stripe Subscription",
-      "Account Management",
-    ],
-    button: {
-      text: "Generate some lyrics!",
-      link: "https://lirical.webflow.io/",
-    },
-  },
-  {
-    name: "File Manager",
-    tech: "Electron, React, Material UI, Node",
-    popular: true,
-    features: [
-      "Free to use",
-      "Desktop only",
-      "Bulk update files/folders",
-      "Specify search parameters",
-      "Replace specific characters",
-    ],
-    button: {
-      text: "Check out the Github",
-      link: "https://github.com/BustosAndrew/Desktop-Tools",
-    },
-  },
-  {
-    name: "Honest Reviews",
-    tech: "React, Firebase, Material UI",
-    popular: false,
-    features: [
-      "Account Management",
-      "Post an honest review",
-      "Upvote/downvote reviews",
-      "Light/dark mode",
-    ],
-    button: {
-      text: "Make your first review!",
-      link: "https://honestreviews.netlify.app/",
     },
   },
 ];
