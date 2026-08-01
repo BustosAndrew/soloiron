@@ -3,7 +3,7 @@ interface Props {
   href: string;
   size?: "md" | "lg";
   block?: boolean;
-  style?: "outline" | "primary" | "inverted" | "muted";
+  style?: "outline" | "primary" | "inverted" | "muted" | "ghost";
   class?: string;
   [x: string]: any;
 }
@@ -40,6 +40,13 @@ const styles: Record<string, string> = {
     "bg-white text-stone-900 border-2 border-transparent shadow-lg shadow-black/20 ring-0 ring-brand-400/0 hover:bg-brand-50 hover:text-brand-700 hover:shadow-xl hover:shadow-brand-500/30 hover:ring-4 hover:ring-brand-400/40",
   muted:
     "bg-stone-100 text-stone-900 border-2 border-transparent hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-100 dark:hover:bg-stone-700",
+  /* For sitting on dark or vibrant panels (the CTA block). Stays neutral —
+     white-on-white rather than a brand tint, which would clash with the rose
+     glow of the `inverted` button it pairs with. Note this variant must not be
+     approximated by passing overrides to `primary`: the leftover utilities win
+     or lose on CSS source order, not on class-attribute order. */
+  ghost:
+    "bg-white/10 text-white border-2 border-white/30 backdrop-blur hover:bg-white/20 hover:border-white/60 hover:shadow-lg hover:shadow-black/30 dark:bg-white/10 dark:text-white dark:hover:bg-white/20",
 };
 ---
 
